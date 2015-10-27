@@ -1,0 +1,16 @@
+{
+	"manifest_version": 2,
+	"name": "Monstercat Connect Helper",
+	"description": "Does various tasks on connect.monstercat.com.",
+	"version": "0.1",
+	"author": "z3ntu",
+	"homepage_url": "https://z3ntu.github.io",
+	"content_scripts": [ {
+		"js": [ "js/jquery-2.1.4.min.js", "js/connecthelper.js" ],
+		"matches": ["*://connect.monstercat.com/*"],
+		"run_at": "document_end"
+	}],
+	"permissions": [
+		"*://connect.monstercat.com/*"
+	]
+}
