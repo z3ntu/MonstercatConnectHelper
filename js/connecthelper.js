@@ -1,6 +1,7 @@
 var checkIfReadyID;
 var active = false;
 var currentHash = "";
+var release_ids = [];
 
 var manifest = chrome.runtime.getManifest();
 var args = ["%c Monstercat Connect Helper%c v" + manifest.version + "%c by%c " + manifest.author + " %c " + manifest.homepage_url, "background: #222;color: #bada55", "background: #222;color: #c0ffee", "background: #222;color: #bada55", "background: #222;color: #c0ffee", ""];
@@ -8,13 +9,11 @@ console.log.apply(console, args);
 
 $(window).on('hashchange', hashchanged);
 hashchanged();
-addDownloadAllButton();
 
 function hashchanged() {
     if (window.location.hash != currentHash && checkHash()) {
         onReleasesPage();
         currentHash = window.location.hash;
-        // $(window).off('hashchange');
     }
 }
 
@@ -23,66 +22,67 @@ function checkHash() {
 }
 
 function onReleasesPage() {
-    checkIfReadyID = setInterval(checkRegisterDownloadListener, 500);
-    // console.log("on releases page");
+    checkIfReadyID = setInterval(checkReleasesReady, 500);
 }
 
-function checkRegisterDownloadListener() {
+function checkReleasesReady() {
     var tr = $("body > div.connect > div.container-view > div.content > div > div > div.content > div > div.releases.grid-view > table > tbody > tr");
     if (tr.length > 0) {
         clearInterval(checkIfReadyID);
+
+        // TEMP MOVE HERE
+        addDownloadAllButton();
+
+        tr.each(registerDownloadMenuListener);
     }
-    //console.log(tr);
-    tr.each(registerDownloadMenuListener);
 }
 
 function registerDownloadMenuListener(i, el) {
     $(el).find("button[role='download-release'] > i").click(downloadMenuOpened);
-    // console.log(i);
-    // console.log(el);
-    // console.log($(el).find("button[role='download-release'] > i"));
-    // console.log($("button[role='download-release'] > i"));
-    // console.log("foreachcall function")
 }
 
 function downloadMenuOpened() {
-    // console.log("download menu opened");
     window.setTimeout(contextMenuOpen, 3);
 }
 
 function contextMenuOpen() {
-    // console.log($("body > div.context-menu-view.open").length > 0);
-    // $("body > div.context-menu-view.open > ul").append();
     var flacELement = $("body > div.context-menu-view.open > ul > li").first().clone(true);
     var newDownloadHref = flacELement.children('a').attr("href").replace("wav", "flac");
     flacELement.attr("index", 5);
-    // console.log(flacELement.children('a'));
     flacELement.children('a').text("FLAC");
     flacELement.children('a').attr("href", newDownloadHref);
 
-    // console.log(flacELement);
-
-    flacELement.appendTo($("body > div.context-menu-view.open > ul"));
+    flacELement.appendTo("body > div.context-menu-view.open > ul");
 }
 
 function addDownloadAllButton() {
-    var button = "<input type='button' value='Download all>'";
-    console.log($(".menu-view > .content"));
+    var button = $('<div align="center"><input type="button" value="Download All"></div>');
     $(".menu-view > .content").append(button).click(checkDownloadAll);
 }
 
 function checkDownloadAll() {
     var tr = $("body > div.connect > div.container-view > div.content > div > div > div.content > div > div.releases.grid-view > table > tbody > tr");
-    if (tr.length > 0) {
-        clearInterval(checkIfReadyID);
-    }
-    //console.log(tr);
-    tr.each(function(value){
-        var release_id = value.getAttribute("release-id");
-        console.log(release_id)
+
+    tr.each(function(i, el){
+        var release_id = el.getAttribute("release-id");
+        release_ids.push(release_id);
     });
+    if(pressNextButton()) {
+        setTimeout(checkDownloadAll, 100);
+    } else {
+        console.log(release_ids);
+    }
 }
 
 function pressNextButton() {
-    $("button[role='page-next']").click()
+    return pressButton("page-next");
+}
+
+function pressButton(role) {
+    var nextButton = $("button[role='"+role+"']");
+    if(nextButton.is(":disabled")){
+        return false;
+    }
+    nextButton.click();
+    return true;
 }
