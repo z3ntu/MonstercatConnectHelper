@@ -57,7 +57,7 @@ function contextMenuOpen() {
 
 function addDownloadAllButton() {
     var button = $('<div align="center"><input type="button" value="Download All"></div>');
-    $(".menu-view > .content").append(button).click(checkDownloadAll);
+    $(".menu-view > .content").append(button.click(checkDownloadAll));
 }
 
 function checkDownloadAll() {
