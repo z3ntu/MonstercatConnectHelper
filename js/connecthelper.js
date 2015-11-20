@@ -1,5 +1,5 @@
 var checkIfReadyID;
-var active = false;
+var checkMenuViewID;
 var currentHash = "";
 var release_ids = [];
 
@@ -9,6 +9,9 @@ console.log.apply(console, args);
 
 $(window).on('hashchange', hashchanged);
 hashchanged();
+
+checkMenuViewID = setInterval(checkMenuViewReady, 500);
+
 
 function hashchanged() {
     if (window.location.hash != currentHash && checkHash()) {
@@ -30,10 +33,14 @@ function checkReleasesReady() {
     if (tr.length > 0) {
         clearInterval(checkIfReadyID);
 
-        // TEMP MOVE HERE
-        addDownloadAllButton();
-
         tr.each(registerDownloadMenuListener);
+    }
+}
+
+function checkMenuViewReady() {
+    if($(".menu-view > .content").length) {
+        clearInterval(checkMenuViewID);
+        addDownloadAllButton();
     }
 }
 
@@ -56,8 +63,11 @@ function contextMenuOpen() {
 }
 
 function addDownloadAllButton() {
+    var menuviewContent = $(".menu-view > .content");
     var button = $('<div align="center"><input type="button" value="Download All"></div>');
-    $(".menu-view > .content").append(button.click(checkDownloadAll));
+    menuviewContent.append(button.click(checkDownloadAll));
+    var downloadButton = $('<div align="center"><a style="display: none;" id="downloadNow">Download Now</a></div>');
+    menuviewContent.append(downloadButton.click(downloadList));
 }
 
 function checkDownloadAll() {
@@ -71,7 +81,15 @@ function checkDownloadAll() {
         setTimeout(checkDownloadAll, 100);
     } else {
         console.log(release_ids);
+        downloadList();
     }
+}
+
+function downloadList() {
+    var button = $("#downloadNow");
+    button.attr("download", "monstercatconnect.json");
+    button.attr('href', "data:application/json,"+JSON.stringify(release_ids));
+    button.show();
 }
 
 function pressNextButton() {

@@ -2,7 +2,7 @@
 	"manifest_version": 2,
 	"name": "Monstercat Connect Helper",
 	"description": "Does various tasks on connect.monstercat.com.",
-	"version": "0.1",
+	"version": "0.2",
 	"author": "z3ntu",
 	"homepage_url": "https://z3ntu.github.io",
 	"content_scripts": [ {
