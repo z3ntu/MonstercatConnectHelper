@@ -16,8 +16,11 @@ checkMenuViewID = setInterval(checkMenuViewReady, 500);
 function hashchanged() {
     if (window.location.hash != currentHash && checkHash()) {
         onReleasesPage();
-        currentHash = window.location.hash;
+        $("#downloadAllButton").show();
+    } else {
+        $("#downloadAllButton").hide();
     }
+    currentHash = window.location.hash;
 }
 
 function checkHash() {
@@ -64,7 +67,7 @@ function contextMenuOpen() {
 
 function addDownloadAllButton() {
     var menuviewContent = $(".menu-view > .content");
-    var button = $('<div align="center"><input type="button" value="Download All"></div>');
+    var button = $('<div align="center"><input id="downloadAllButton" type="button" value="Download All"></div>');
     menuviewContent.append(button.click(checkDownloadAll));
     var downloadButton = $('<div align="center"><a style="display: none;" id="downloadNow">Download Now</a></div>');
     menuviewContent.append(downloadButton.click(downloadList));
