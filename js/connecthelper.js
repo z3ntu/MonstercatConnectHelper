@@ -15,7 +15,7 @@ checkMenuViewID = setInterval(checkMenuViewReady, 500);
 
 function hashchanged() {
     if (window.location.hash != currentHash && checkHash()) {
-        onReleasesPage();
+        // onReleasesPage();
         $("#downloadAllButton").show();
     } else {
         $("#downloadAllButton").hide();
@@ -27,18 +27,18 @@ function checkHash() {
     return window.location.hash.indexOf("#music/releases") > -1;
 }
 
-function onReleasesPage() {
+/*function onReleasesPage() {
     checkIfReadyID = setInterval(checkReleasesReady, 500);
-}
+}*/
 
-function checkReleasesReady() {
+/*function checkReleasesReady() {
     var tr = $("body > div.connect > div.container-view > div.content > div > div > div.content > div > div.releases.grid-view > table > tbody > tr");
     if (tr.length > 0) {
         clearInterval(checkIfReadyID);
 
         tr.each(registerDownloadMenuListener);
     }
-}
+}*/
 
 function checkMenuViewReady() {
     if($(".menu-view > .content").length) {
@@ -47,15 +47,15 @@ function checkMenuViewReady() {
     }
 }
 
-function registerDownloadMenuListener(i, el) {
+/*function registerDownloadMenuListener(i, el) {
     $(el).find("button[role='download-release'] > i").click(downloadMenuOpened);
-}
+}*/
 
-function downloadMenuOpened() {
+/*function downloadMenuOpened() {
     window.setTimeout(contextMenuOpen, 3);
-}
+}*/
 
-function contextMenuOpen() {
+/*function contextMenuOpen() {
     var flacELement = $("body > div.context-menu-view.open > ul > li").first().clone(true);
     var newDownloadHref = flacELement.children('a').attr("href").replace("wav", "flac");
     flacELement.attr("index", 5);
@@ -63,7 +63,7 @@ function contextMenuOpen() {
     flacELement.children('a').attr("href", newDownloadHref);
 
     flacELement.appendTo("body > div.context-menu-view.open > ul");
-}
+}*/
 
 function addDownloadAllButton() {
     var menuviewContent = $(".menu-view > .content");
