@@ -1,2 +1,6 @@
 # Jetbrains IDE
 .idea/
+
+# Binary and key
+MonstercatConnectHelper.pem
+MonstercatConnectHelper.crx
